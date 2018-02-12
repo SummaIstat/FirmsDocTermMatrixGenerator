@@ -180,12 +180,67 @@ public class Utils {
 		    	break;
 		    default:
 		    	stemmer = null;
-		    	logger.info("The language string \"" + language + "\" set as FIRST_LANG or SECOND_LANG is not valid !");
-		    	logger.info("The program will be terminated !");
-		    	System.exit(0);
+		    	//logger.info("The language string \"" + language + "\" set as FIRST_LANG or SECOND_LANG is not valid !");
+		    	//logger.info("The program will be terminated !");
+		    	//System.exit(0);
 		    	break;
 		}
 		return stemmer;
+	}
+	
+	public static boolean isValidOrSupportedLanguage(String language) {
+		boolean result = false;		
+		switch(language) {
+		    case "DAN":
+		    	result = true;
+		    	break;
+		    case "DUT":
+		    	result = true;
+		    	break;
+		    case "ENG":
+		    	result = true;
+		    	break;
+		    case "FIN":
+		    	result = true;
+		    	break;
+		    case "FRE":
+		    	result = true;
+		    	break;
+		    case "GER":
+		    	result = true;
+		    	break;
+		    case "HUN":
+		    	result = true;
+		    	break;
+		    case "ITA":
+		    	result = true;
+		    	break;
+		    case "NOR":
+		    	result = true;
+		    	break;
+		    case "POR":
+		    	result = true;
+		    	break;
+		    case "ROM":
+		    	result = true;
+		    	break;
+		    case "RUS":
+		    	result = true;
+		    	break;
+		    case "SPA":
+		    	result = true;
+		    	break;
+		    case "SWE":
+		    	result = true;
+		    	break;
+		    case "TUR":
+		    	result = true;
+		    	break;
+		    default:
+		    	result = false;
+		    	break;
+		}
+		return result;
 	}
 	
 }

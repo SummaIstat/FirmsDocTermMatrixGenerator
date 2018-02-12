@@ -237,9 +237,19 @@ public class MatrixGenerator {
 		Set<String> firstLang_secondLang_StemmedTermSet = new ConcurrentSkipListSet<String>();
 		
 		logger.info("building the stemmed termSet of the first language ("+ FIRST_LANG +")");
-		firstLangStemmedTermSet = getLanguageSpecificStemmedTermSet(termSet, FIRST_LANG, FIRST_LANG_PAR_FILE_PATH);
-		logger.info("stemmed termSet of the first language built");
 		
+		if (Utils.isValidOrSupportedLanguage(FIRST_LANG)){
+			firstLangStemmedTermSet = getLanguageSpecificStemmedTermSet(termSet, FIRST_LANG, FIRST_LANG_PAR_FILE_PATH);
+			logger.info("stemmed termSet of the first language built");
+		}else{
+			firstLangStemmedTermSet=termSet;
+			logger.info("===========================");
+			logger.info("=====     WARNING     =====");
+			logger.info("===========================");
+			logger.info("The language string \"" + FIRST_LANG + "\" set as FIRST_LANG or SECOND_LANG is unsupported or not valid !");
+			logger.info("The lemmatization and the stemming operations will not be done for this language !\n");
+		}
+						
 		diff_TermSet = termSet;
 		//int size_before = diff_TermSet.size();
 		//int normalStemmedMapSize_1 = normalStemmedMap.size(); 
@@ -251,8 +261,18 @@ public class MatrixGenerator {
 		//int size_after = diff_TermSet.size();
 		
 		logger.info("building the stemmed termSet of the second language ("+ SECOND_LANG +")");
-		secondLangStemmedTermSet = getLanguageSpecificStemmedTermSet(diff_TermSet, SECOND_LANG, SECOND_LANG_PAR_FILE_PATH);
-		logger.info("stemmed termSet of the second language built");
+		
+		if (Utils.isValidOrSupportedLanguage(SECOND_LANG)){
+			secondLangStemmedTermSet = getLanguageSpecificStemmedTermSet(diff_TermSet, SECOND_LANG, SECOND_LANG_PAR_FILE_PATH);
+			logger.info("stemmed termSet of the second language built");
+		}else{
+			secondLangStemmedTermSet=termSet;
+			logger.info("===========================");
+			logger.info("=====     WARNING     =====");
+			logger.info("===========================");
+			logger.info("The language string \"" + SECOND_LANG + "\" set as FIRST_LANG or SECOND_LANG is unsupported or not valid !");
+			logger.info("The lemmatization and the stemming operations will not be done for this language\n");
+		}
 		
 		firstLang_secondLang_StemmedTermSet.addAll(firstLangStemmedTermSet);
 		firstLang_secondLang_StemmedTermSet.addAll(secondLangStemmedTermSet);
@@ -284,12 +304,15 @@ public class MatrixGenerator {
 		String[] treeTaggerArgs = {"-token", "-lemma"};
 		tt.setArguments(treeTaggerArgs);
 		
+		
+		
 		try {
 			
 			tt.setModel(languageSpecificParFilePath);
 		    tt.setHandler(new TokenHandler<String>() {
 		    	public void token(String token, String pos, String lemma) {
-		    		//System.out.println(token + "\t" + pos + "\t" + lemma);
+		    		System.out.println("=> " + token + "\t" + pos + "\t" + lemma);
+		    		logger.info("=> " + token + "\t" + pos + "\t" + lemma);
 		    		if (!lemma.equals("<unknown>")){
 		    			if (language.equals(FIRST_LANG)){
 		    				firstLangStemmer.setCurrent(lemma.toLowerCase());
@@ -699,6 +722,7 @@ public class MatrixGenerator {
 		inputStream.close();
 		fis.close();
 	}
+	
 	
 }
 
